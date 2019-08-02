@@ -1,6 +1,7 @@
 package com.stackroute.controller;
 
 import com.stackroute.domain.Track;
+import com.stackroute.repository.TrackRepository;
 import com.stackroute.service.TrackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import java.util.Optional;
 @RequestMapping(value = "api/v1/")
 public class TrackController {
     private TrackService trackService;
+    private TrackRepository repository;
 
     @Autowired
     public TrackController(TrackService trackService1) {
@@ -47,6 +49,12 @@ public class TrackController {
     public ResponseEntity<?> deleteTrackById(@PathVariable int id) {
         Optional<Track> trackRemoved = Optional.of(trackService.deleteTrackById(id));
         return new ResponseEntity<>(trackRemoved, HttpStatus.OK);
+    }
+    //Use PatchMapping to update the element in database
+    @PatchMapping("/track/{id}")
+    public ResponseEntity<?> updateTrack(@RequestBody Track track, @PathVariable("id") int id) {
+        Track track1 = trackService.updateTrackById(track, id);
+        return new ResponseEntity < > (track1, HttpStatus.OK);
     }
 
 }
