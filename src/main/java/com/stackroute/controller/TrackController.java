@@ -1,5 +1,7 @@
 package com.stackroute.controller;
 import com.stackroute.domain.Track;
+import com.stackroute.exceptions.TrackAlreadyExistsException;
+import com.stackroute.exceptions.TrackNotFoundException;
 import com.stackroute.repository.TrackRepository;
 import com.stackroute.service.TrackService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +28,7 @@ public class TrackController {
         try {
             trackService.saveTrack(track);
             responseEntity = new ResponseEntity<String>("Successfully created", HttpStatus.CREATED);
-        } catch (Exception e) {
+        } catch (TrackAlreadyExistsException e) {
             responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.CONFLICT);
         }
         return responseEntity;
@@ -34,8 +36,17 @@ public class TrackController {
 //Use GetMapping to find the track searched by id
     @GetMapping("track/{id}")
     public ResponseEntity<?> getTrackById(@PathVariable int id) {
-        Track retriveUser = trackService.getTrackById(id);
-        return new ResponseEntity<>(retriveUser, HttpStatus.OK);
+        ResponseEntity responseEntity;
+        try
+        {
+            Track retrivedTrack=trackService.getTrackById(id);
+            return new ResponseEntity<>(retrivedTrack,HttpStatus.OK);
+        }
+        catch(TrackNotFoundException e)
+        {
+            responseEntity=new ResponseEntity<>(e.getMessage(),HttpStatus.OK);
+        }
+        return responseEntity;
     }
 //Use GetMapping to get all the trackes in the datadase with details
     @GetMapping("track")
@@ -54,7 +65,8 @@ public class TrackController {
         Track track1 = trackService.updateTrackById(track, id);
         return new ResponseEntity < > (track1, HttpStatus.OK);
     }
-    @GetMapping("track/search/{name}")
+    //Use of GetMapping to find out the names of the tracks that are matches to given input
+    @GetMapping("tracks/{name}")
     public ResponseEntity<?> getTrackByName(@PathVariable("name")  String name)
     {
         return new ResponseEntity<>(trackService.getTrackByName(name),HttpStatus.OK);
