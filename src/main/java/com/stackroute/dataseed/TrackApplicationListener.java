@@ -3,6 +3,7 @@ package com.stackroute.dataseed;
 import com.stackroute.domain.Track;
 import com.stackroute.repository.TrackRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
@@ -10,10 +11,12 @@ import org.springframework.stereotype.Component;
 //This class always provide data when we are running the application each time instead of putting data
 // each time after running of our project
 @Component
+@Qualifier("TrackServiceImpl")
 public class TrackApplicationListener implements ApplicationListener<ContextRefreshedEvent> {
     private TrackRepository trackRepository;
 
     //Autowire of TrackRepository and making constructor of TrackApplicationListener class
+
     @Autowired
     public TrackApplicationListener(TrackRepository trackRepository) {
         this.trackRepository = trackRepository;
