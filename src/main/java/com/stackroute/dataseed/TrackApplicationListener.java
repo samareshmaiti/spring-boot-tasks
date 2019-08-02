@@ -22,7 +22,7 @@ public class TrackApplicationListener implements ApplicationListener<ContextRefr
     //putting data into database using Track object
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
-        System.out.println("Context Event Received");
+        System.out.println("Context application listerer Received");
         Track track1 = new Track(1, "hello", "first");
         trackRepository.save(track1);
         Track track2 = new Track(2, "hello2", "first2");

@@ -2,6 +2,7 @@ package com.stackroute.service;
 
 import com.stackroute.domain.Track;
 import com.stackroute.exceptions.TrackAlreadyExistsException;
+import com.stackroute.exceptions.TrackNotFoundException;
 import com.stackroute.repository.TrackRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -23,12 +24,10 @@ public class TrackServiceImpl implements TrackService {
     //implement of saveTrack() method
     @Override
     public Track saveTrack(Track track) throws TrackAlreadyExistsException {
-        if(trackRepository.existsById(track.getId()))
-        {
+        if (trackRepository.existsById(track.getId())) {
             throw new TrackAlreadyExistsException("Track is already exists");
         }
-        if(trackRepository==null)
-        {
+        if (trackRepository == null) {
             throw new TrackAlreadyExistsException("check connection to database");
         }
         return trackRepository.save(track);
@@ -37,8 +36,13 @@ public class TrackServiceImpl implements TrackService {
 
     //implement of getTrackById() method
     @Override
-    public Track getTrackById(int id) {
-        return trackRepository.findById(id).get();
+    public Track getTrackById(int id) throws TrackNotFoundException {
+        if (!trackRepository.existsById(id)) {
+            throw new TrackNotFoundException("Track not found ");
+        }
+        Track retrievedTrack = trackRepository.findById(id).get();
+        return retrievedTrack;
+
 
     }
 
@@ -65,10 +69,11 @@ public class TrackServiceImpl implements TrackService {
         trackRepository.deleteById(id);
         return trackRepository.save(track);
     }
-//implement of the getTrackByName() method
+
+    //implement of the getTrackByName() method
     @Override
     public List<Track> getTrackByName(String name) {
-       return  trackRepository.getTrackByName(name);
+        return trackRepository.getTrackByName(name);
     }
 
 
