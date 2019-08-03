@@ -6,10 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 //This class is to implement the commandline dataseed implementation
 @Component
+@Profile("!dev")
 public class CommandLineTrackApplicationListener implements CommandLineRunner {
     private TrackRepository trackRepository;
 

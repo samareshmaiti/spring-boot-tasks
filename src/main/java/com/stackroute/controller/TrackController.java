@@ -7,6 +7,7 @@ import com.stackroute.repository.TrackRepository;
 import com.stackroute.service.TrackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "api/v1/")
+
 public class TrackController {
 
     private TrackService trackService;
@@ -23,11 +25,13 @@ public class TrackController {
 
     @Autowired
 //implementation of the @Qualifier annotation
+
     public TrackController(@Qualifier("Dummy") TrackService trackService1) {
         this.trackService = trackService1;
     }
 
     //Use of PostMapping to put the values in the database
+    @Profile("prod")
     @PostMapping("track")
     public ResponseEntity<?> saveTrack(@RequestBody Track track) throws TrackAlreadyExistsException {
         ResponseEntity responseEntity;
