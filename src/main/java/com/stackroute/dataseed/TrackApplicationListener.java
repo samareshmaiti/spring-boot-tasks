@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 //This class always provide data when we are running the application each time instead of putting data
 // each time after running of our project
 @Component
-@Qualifier("TrackServiceImpl")
+//@Qualifier("TrackServiceImpl")
 public class TrackApplicationListener implements ApplicationListener<ContextRefreshedEvent> {
     private TrackRepository trackRepository;
 

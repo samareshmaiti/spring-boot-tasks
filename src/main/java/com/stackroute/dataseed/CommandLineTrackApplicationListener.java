@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 //This class is to implement the commandline dataseed implementation
 @Component
-@Profile("!dev")
+//@Profile("!dev")
 public class CommandLineTrackApplicationListener implements CommandLineRunner {
     private TrackRepository trackRepository;
 

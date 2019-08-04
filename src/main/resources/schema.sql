@@ -1,0 +1,6 @@
+DROP TABLE IF EXISTS system;
+CREATE TABLE track (
+  id INT NOT NULL,
+  trackName VARCHAR(20) NOT NULL,
+  comment VARCHAR(30) NOT NULL,
+  PRIMARY KEY (id));
