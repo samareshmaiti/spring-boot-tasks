@@ -1,6 +1,6 @@
-This is a assignment of making a spring-boot web application.
-As a database we use H2-database and also for checking what's the GET,POST,DELETE,BATCH methods in postman.
-GET=>for getting data from database.
-POST=>for putting data in database
-DELETE=>for deleting data in database
-PATCH=>for update the database
+ Running Logic on Startup in Spring. Create seed data to pre-fill the database with movie
+information whenever the application starts. Use both approaches:
+Approach 1: ApplicationListener<ContextRefreshedEvent>
+Approach 2: CommandLineRunner (Find out how it differs from ApplicationRunner)
+
+
