@@ -27,13 +27,17 @@ public class TrackServiceImpl implements TrackService {
     //implement of saveTrack() method
     @Override
     public Track saveTrack(Track track) throws TrackAlreadyExistsException {
+        Track savedTrack = null;
         if (trackRepository.existsById(track.getId())) {
             throw new TrackAlreadyExistsException("Track is already exists");
+        } else {
+            savedTrack = trackRepository.save(track);
+            if (savedTrack == null) {
+                throw new TrackAlreadyExistsException("User already exist");
+            }
         }
-        if (trackRepository == null) {
-            throw new TrackAlreadyExistsException("check connection to database");
-        }
-        return trackRepository.save(track);
+
+        return savedTrack;
 
     }
 
