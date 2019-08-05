@@ -29,12 +29,12 @@ public class TrackController {
 //    public TrackController( TrackService trackService1) {
 //        this.trackService = trackService1;
 //    }
-    public TrackController( TrackService trackService1) {
+    public TrackController(TrackService trackService1) {
         this.trackService = trackService1;
     }
 
     //Use of PostMapping to put the values in the database
-    @Profile("prod")
+    // @Profile("prod")
     @PostMapping("track")
     public ResponseEntity<?> saveTrack(@RequestBody Track track) throws TrackAlreadyExistsException {
         ResponseEntity responseEntity;

@@ -1,1 +1,0 @@
-INSERT INTO track(id,name,comment)VALUES(10,"Gana","Mass");
