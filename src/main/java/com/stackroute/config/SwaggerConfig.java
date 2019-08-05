@@ -9,18 +9,19 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import static springfox.documentation.builders.PathSelectors.regex;
- @Configuration
 
-    @EnableSwagger2
- //Added Swagger class to project
-    public class SwaggerConfig {
-        @Bean
-        public Docket productApi() {
-            return new Docket(DocumentationType.SWAGGER_2)
-                    .select()                 .apis(RequestHandlerSelectors.basePackage("com.stackroute"))
-                    .paths(regex("/api/v1.*"))
-                    .build();
-        }
+@Configuration
+
+@EnableSwagger2
+//Added Swagger class to project
+public class SwaggerConfig {
+    @Bean
+    public Docket productApi() {
+        return new Docket(DocumentationType.SWAGGER_2)
+                .select().apis(RequestHandlerSelectors.basePackage("com.stackroute"))
+                .paths(regex("/api/v1.*"))
+                .build();
     }
+}
 
 
