@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-//@Profile("dev")
+@Profile("dev")
 @Service
 //This annotation defines a preference when multiple beans of the same type are present.
 // The bean associated with the @Primary annotation will be used unless otherwise indicated.

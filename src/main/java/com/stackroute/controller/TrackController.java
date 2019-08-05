@@ -29,7 +29,7 @@ public class TrackController {
 //    public TrackController( TrackService trackService1) {
 //        this.trackService = trackService1;
 //    }
-    public TrackController(@Qualifier("Dummy") TrackService trackService1) {
+    public TrackController( TrackService trackService1) {
         this.trackService = trackService1;
     }
 
