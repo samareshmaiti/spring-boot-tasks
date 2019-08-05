@@ -39,7 +39,7 @@ public class TrackController {
         return new ResponseEntity<>(retriveUser, HttpStatus.OK);
     }
 //Use GetMapping to get all the trackes in the datadase with details
-    @GetMapping("track")
+    @GetMapping("tracks")
     public ResponseEntity<?> getAllTrack() {
         return new ResponseEntity<>(trackService.getAllTracks(), HttpStatus.OK);
     }
