@@ -46,7 +46,6 @@ public class TrackControllerTest {
     public void setUp() {
 
         MockitoAnnotations.initMocks(this);
-        //  mockMvc = MockMvcBuilders.standaloneSetup(trackController).build();
         mockMvc = MockMvcBuilders.standaloneSetup(trackController).setControllerAdvice(new GlobalException()).build();
         track = new Track();
         track.setId(10);
