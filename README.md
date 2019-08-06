@@ -1,3 +1,3 @@
-This assignment is to use lombok in spring boot
+This assignment is to make test cases and to test whether the test cases are proper or not.
 
 
