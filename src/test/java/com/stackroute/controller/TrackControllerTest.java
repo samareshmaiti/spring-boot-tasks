@@ -2,7 +2,9 @@ package com.stackroute.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stackroute.domain.Track;
+import com.stackroute.exceptions.GlobalException;
 import com.stackroute.exceptions.TrackAlreadyExistsException;
+import com.stackroute.exceptions.TrackNotFoundException;
 import com.stackroute.service.TrackService;
 import org.junit.Before;
 import org.junit.Test;
@@ -44,7 +46,8 @@ public class TrackControllerTest {
     public void setUp() {
 
         MockitoAnnotations.initMocks(this);
-        mockMvc = MockMvcBuilders.standaloneSetup(trackController).build();
+        //  mockMvc = MockMvcBuilders.standaloneSetup(trackController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(trackController).setControllerAdvice(new GlobalException()).build();
         track = new Track();
         track.setId(10);
         track.setName("track name");
@@ -54,10 +57,11 @@ public class TrackControllerTest {
         list.add(track);
     }
 
+
     @Test
     public void saveTrack() throws Exception {
         when(trackService.saveTrack(any())).thenReturn(track);
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/")
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/track")
                 .contentType(MediaType.APPLICATION_JSON).content(asJsonString(track)))
                 .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andDo(MockMvcResultHandlers.print());
@@ -65,25 +69,45 @@ public class TrackControllerTest {
 
     }
 
+
     @Test
     public void saveTrackFaliure() throws Exception {
         when(trackService.saveTrack(any())).thenThrow(TrackAlreadyExistsException.class);
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/")
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/track")
                 .contentType(MediaType.APPLICATION_JSON).content(asJsonString(track)))
-                .andExpect(MockMvcResultMatchers.status().isConflict())
+                .andExpect(MockMvcResultMatchers.status().isNotAcceptable())
                 .andDo(MockMvcResultHandlers.print());
     }
 
     @Test
     public void getAllTrack() throws Exception {
         when(trackService.getAllTracks()).thenReturn(list);
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/")
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/track")
                 .contentType(MediaType.APPLICATION_JSON).content(asJsonString(track)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print());
 
     }
 
+    @Test
+    public void deleteTrackById() throws Exception {
+        when(trackService.getAllTracks()).thenReturn(list);
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/track/10")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(MockMvcResultHandlers.print());
+
+    }
+
+    @Test
+    public void getTrackById() throws Exception {
+        when(trackService.getAllTracks()).thenReturn(list);
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/track/10")
+                .contentType(MediaType.APPLICATION_JSON).content(asJsonString(track)))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(MockMvcResultHandlers.print());
+
+    }
 
     private static String asJsonString(final Object obj) {
         try {

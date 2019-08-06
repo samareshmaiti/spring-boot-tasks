@@ -39,15 +39,15 @@ public class TrackRepositoryTest {
 
 
     @Test
-    public void testSaveUser() {
+    public void testSaveTRack() {
         trackRepository.save(track);
-        Track fetchUser = trackRepository.findById(track.getId()).get();
-        Assert.assertEquals(10, fetchUser.getId());
+        Track fetchTrack = trackRepository.findById(track.getId()).get();
+        Assert.assertEquals(10, fetchTrack.getId());
 
     }
 
     @Test
-    public void testSaveUserFailure() {
+    public void testSaveTrackFailure() {
         Track testUser = new Track(10, "track name", "comment1");
         trackRepository.save(track);
         Track fetchUser = trackRepository.findById(track.getId()).get();
@@ -55,7 +55,7 @@ public class TrackRepositoryTest {
     }
 
     @Test
-    public void testGetAllUser() {
+    public void testGetAllTrack() {
         Track u = new Track(10, "track name1", "comment2");
         Track u1 = new Track(11, "track name2", "comment3");
         trackRepository.save(u);

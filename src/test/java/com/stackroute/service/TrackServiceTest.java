@@ -3,6 +3,7 @@ package com.stackroute.service;
 import com.stackroute.domain.Track;
 import com.stackroute.exceptions.TrackAlreadyExistsException;
 import com.stackroute.repository.TrackRepository;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,7 +27,7 @@ public class TrackServiceTest {
 
     //Inject the mocks as dependencies into UserServiceImpl
     @InjectMocks
-    TrackServiceImpl trackService;
+    TrackServiceImpl trackServiceImpl;
     List<Track> list = null;
 
     @Before
@@ -43,6 +44,11 @@ public class TrackServiceTest {
 
     }
 
+    @After
+    public void tearDown() {
+        this.trackServiceImpl = null;
+    }
+
     @Test
     public void saveTrackSuccess() throws TrackAlreadyExistsException {
 
@@ -56,7 +62,7 @@ public class TrackServiceTest {
     }
 
     @Test
-    public void getAllUser() {
+    public void getAllTrack() {
 
         trackRepository.save(track);
         //stubbing the mock to return specific data
@@ -68,12 +74,8 @@ public class TrackServiceTest {
     @Test(expected = TrackAlreadyExistsException.class)
     public void saveTrackTestFailure() throws TrackAlreadyExistsException {
         when(trackRepository.save(track)).thenReturn(null);
-        Track saveTrack = trackService.saveTrack(track);
-        //System.out.println("savedUser" + saveTrack);
-        Assert.assertNotEquals(track, saveTrack);
-
-       /*doThrow(new UserAlreadyExistException()).when(userRepository).findById(eq(101));
-       userService.saveUser(user);*/
+        Track saveTrack = trackServiceImpl.saveTrack(track);
+        Assert.assertEquals(track, saveTrack);
 
 
     }
