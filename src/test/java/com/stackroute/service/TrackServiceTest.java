@@ -2,6 +2,7 @@ package com.stackroute.service;
 
 import com.stackroute.domain.Track;
 import com.stackroute.exceptions.TrackAlreadyExistsException;
+import com.stackroute.exceptions.TrackNotFoundException;
 import com.stackroute.repository.TrackRepository;
 import org.junit.After;
 import org.junit.Assert;
@@ -13,6 +14,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -68,6 +70,7 @@ public class TrackServiceTest {
         when(trackRepository.save(track)).thenReturn(null);
         Track saveTrack = trackServiceImpl.saveTrack(track);
         Assert.assertEquals(track, saveTrack);
+        verify(trackRepository, times(1)).save(track);
 
 
     }
@@ -80,25 +83,33 @@ public class TrackServiceTest {
         when(trackRepository.findAll()).thenReturn(list);
         List<Track> userlist = trackRepository.findAll();
         Assert.assertEquals(list, userlist);
+        verify(trackRepository, times(1)).findAll();
     }
 
-//    @Test
-//    public void givenIdShouldReturnTrackDetails() {
-//    trackRepository.save(track);
-//        System.out.println(track);
-//    when(trackRepository.findById(track.getId())).thenReturn(java.util.Optional.ofNullable(track));
-////    track.setId(10);
-////    trackRepository.deleteById(track.getId());
-//        List<Track> userlist = trackRepository.findAll();
-//        System.out.println(userlist);
-//    Assert.assertEquals(track,trackRepository);
-//    }
+    @Test
+    public void givenTrackIdShouldReturnTrackDetails() throws TrackNotFoundException {
+        trackRepository.save(track);
+        //stubbing the mock to return specific data
+        when(trackRepository.findById(10)).thenReturn(Optional.of(track));
+        Optional<Track> getTrack = trackRepository.findById(10);
+        Assert.assertEquals(track, getTrack.get());
+        verify(trackRepository, times(1)).findById(1);
+    }
+        @Test
+    public void givenTrackNameShouldReturnTrackDetails() throws TrackNotFoundException {
+        trackRepository.save(track);
+        when(trackRepository.getTrackByName("track name")).thenReturn((List<Track>) track);
+        Track getTrack = (Track) trackServiceImpl.getTrackByName("track name");
+        Assert.assertEquals(track, getTrack);
 
-//    @Test
-//    public void givenTrackDetailsShouldUpdateThePreviousDetails() {
-//    trackRepository.save(track);
-//     when(trackRepository.findById(track.getId())).thenReturn(track.getId());
-//
-//    }
+        verify(trackRepository, times(1)).getTrackByName("track name");
+    }
+
+    @Test
+    public void givenTrackDetailsShouldUpdateThePreviousDetails() {
+    trackRepository.save(track);
+     when(trackRepository.findById(track.getId())).thenReturn(Optional.ofNullable(track));
+
+    }
 
 }
