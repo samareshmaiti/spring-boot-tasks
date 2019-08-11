@@ -19,8 +19,8 @@ import java.util.List;
 public class TrackRepositoryTest {
 
     @Autowired
-    TrackRepository trackRepository;
-    Track track;
+   private  TrackRepository trackRepository;
+    private Track track;
 
     @Before
     public void setUp() {
@@ -35,11 +35,12 @@ public class TrackRepositoryTest {
     public void tearDown() {
 
         trackRepository.deleteAll();
+        track=null;
     }
 
 
     @Test
-    public void testSaveTRack() {
+    public void givenTrackShouldReturnSavedTrack() {
         trackRepository.save(track);
         Track fetchTrack = trackRepository.findById(track.getId()).get();
         Assert.assertEquals(10, fetchTrack.getId());
@@ -47,7 +48,7 @@ public class TrackRepositoryTest {
     }
 
     @Test
-    public void testSaveTrackFailure() {
+    public void givenTrackShouldNotReturnSavedTrack() {
         Track testUser = new Track(10, "track name", "comment1");
         trackRepository.save(track);
         Track fetchUser = trackRepository.findById(track.getId()).get();
@@ -55,16 +56,49 @@ public class TrackRepositoryTest {
     }
 
     @Test
-    public void testGetAllTrack() {
+    public void givenInputShouldReturnAllTracks() {
         Track u = new Track(10, "track name1", "comment2");
         Track u1 = new Track(11, "track name2", "comment3");
         trackRepository.save(u);
         trackRepository.save(u1);
 
         List<Track> list = trackRepository.findAll();
-        Assert.assertEquals("comment2", list.get(0).getComment());
+        Assert.assertEquals("track name1", list.get(0).getComment());
+    }
 
 
+
+    @Test
+    public void givenTrackNameShouldReturnProperId() {
+        trackRepository.save(track);
+        Track trackDetails = trackRepository.findById(track.getId()).get();
+        Assert.assertEquals(99, trackDetails.getId());
+    }
+    @Test
+    public void givenTrackNameShouldNotReturnCorrectId() {
+        trackRepository.save(track);
+        Track trackDetails = trackRepository.findById(track.getId()).get();
+        Assert.assertNotEquals(3, trackDetails.getId());
+    }
+    @Test
+    public void givenTrackIdShouldReturnDeletedTrack()
+    {
+        trackRepository.save(track);
+        trackRepository.deleteById(track.getId());
+        Assert.assertEquals(10,track.getId());
+
+    }
+    @Test
+    public void givenTrackDetailsShouldUpdatePreviousTrackDetails()
+    {
+        trackRepository.save(track);
+        trackRepository.deleteById(track.getId());
+        track.setId(10);
+        track.setName("maiti");
+        track.setComment("comment");
+        trackRepository.save(track);
+        Track updatedTrack=trackRepository.findById(track.getId()).get();
+        Assert.assertEquals(track,updatedTrack);
     }
 
 
