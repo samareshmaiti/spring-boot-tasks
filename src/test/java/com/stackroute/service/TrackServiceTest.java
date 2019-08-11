@@ -19,16 +19,16 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 public class TrackServiceTest {
-    Track track;
+    private Track track;
 
     //Create a mock for UserRepository
     @Mock
-    TrackRepository trackRepository;
+    private TrackRepository trackRepository;
 
     //Inject the mocks as dependencies into UserServiceImpl
     @InjectMocks
-    TrackServiceImpl trackServiceImpl;
-    List<Track> list = null;
+    private TrackServiceImpl trackServiceImpl;
+    private List<Track> list = null;
 
     @Before
     public void setUp() {
@@ -47,10 +47,12 @@ public class TrackServiceTest {
     @After
     public void tearDown() {
         this.trackServiceImpl = null;
+        this.track = null;
+        this.list = null;
     }
 
     @Test
-    public void saveTrackSuccess() throws TrackAlreadyExistsException {
+    public void givenTrackDetailsShouldSaveTracks() throws TrackAlreadyExistsException {
 
         when(trackRepository.save((Track) any())).thenReturn(track);
         Track saveTrack = trackRepository.save(track);
@@ -61,8 +63,17 @@ public class TrackServiceTest {
 
     }
 
+    @Test(expected = TrackAlreadyExistsException.class)
+    public void givenTrackDetailsShouldReturnTrackAlreadyExistsException() throws TrackAlreadyExistsException {
+        when(trackRepository.save(track)).thenReturn(null);
+        Track saveTrack = trackServiceImpl.saveTrack(track);
+        Assert.assertEquals(track, saveTrack);
+
+
+    }
+
     @Test
-    public void getAllTrack() {
+    public void givenInputShouldReturnAllTrackDetails() {
 
         trackRepository.save(track);
         //stubbing the mock to return specific data
@@ -71,14 +82,23 @@ public class TrackServiceTest {
         Assert.assertEquals(list, userlist);
     }
 
-    @Test(expected = TrackAlreadyExistsException.class)
-    public void saveTrackTestFailure() throws TrackAlreadyExistsException {
-        when(trackRepository.save(track)).thenReturn(null);
-        Track saveTrack = trackServiceImpl.saveTrack(track);
-        Assert.assertEquals(track, saveTrack);
+//    @Test
+//    public void givenIdShouldReturnTrackDetails() {
+//    trackRepository.save(track);
+//        System.out.println(track);
+//    when(trackRepository.findById(track.getId())).thenReturn(java.util.Optional.ofNullable(track));
+////    track.setId(10);
+////    trackRepository.deleteById(track.getId());
+//        List<Track> userlist = trackRepository.findAll();
+//        System.out.println(userlist);
+//    Assert.assertEquals(track,trackRepository);
+//    }
 
-
-    }
-
+//    @Test
+//    public void givenTrackDetailsShouldUpdateThePreviousDetails() {
+//    trackRepository.save(track);
+//     when(trackRepository.findById(track.getId())).thenReturn(track.getId());
+//
+//    }
 
 }
