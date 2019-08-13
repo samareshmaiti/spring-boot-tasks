@@ -15,13 +15,13 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 // from before into a single, global error handling component.
 public class GlobalException extends ResponseEntityExceptionHandler {
      @ExceptionHandler({TrackAlreadyExistsException.class})
-    public ResponseEntity<String> handleTrackAlreadyExistsException(Exception ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    public ResponseEntity<String> handleTrackAlreadyExistsException(Exception e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_ACCEPTABLE);
     }
 
     @ExceptionHandler({TrackNotFoundException.class})
-    public ResponseEntity<String> handleTrackNotFoundExceptions(Exception ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    public ResponseEntity<String> handleTrackNotFoundExceptions(Exception e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_ACCEPTABLE);
     }
 
     }
