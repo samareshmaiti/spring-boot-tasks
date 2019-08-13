@@ -67,11 +67,13 @@ public class TrackServiceTest {
     public void givenTrackDetailsShouldSaveTracks() throws TrackAlreadyExistsException {
 
         when(trackRepository.save((Track) any())).thenReturn(track);
-        Track saveTrack = trackRepository.save(track);
-        Assert.assertEquals(track, saveTrack);
-
-        //verify here verifies that userRepository save method is only called once
-        verify(trackRepository, times(1)).save(track);
+        if (trackRepository.existsById(track.getId())) {
+            throw new TrackAlreadyExistsException("Track Already exists");
+        } else {
+            Track savedTrack = trackServiceImpl.saveTrack(track);
+            Assert.assertEquals(track, savedTrack);
+            verify(trackRepository, times(1)).save(track);
+        }
 
     }
 
