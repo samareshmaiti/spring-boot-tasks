@@ -28,7 +28,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.internal.verification.VerificationModeFactory.times;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest
@@ -80,6 +82,8 @@ public class TrackControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andDo(MockMvcResultHandlers.print());
 
+        verify(trackService, times(1)).saveTrack(track);
+
 
     }
 
@@ -91,6 +95,7 @@ public class TrackControllerTest {
                 .contentType(MediaType.APPLICATION_JSON).content(asJsonString(track)))
                 .andExpect(MockMvcResultMatchers.status().isNotAcceptable())
                 .andDo(MockMvcResultHandlers.print());
+        verify(trackService, times(1)).saveTrack(track);
     }
 
     //This method to return all the tracks that matches with a certain name
@@ -101,8 +106,10 @@ public class TrackControllerTest {
                 .contentType(MediaType.APPLICATION_JSON).content(asJsonString(track)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print());
+        verify(trackService, times(1)).getAllTracks();
 
     }
+
 
     //This method to check whether to delete a track by a given track id
     @Test
@@ -112,6 +119,7 @@ public class TrackControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print());
+        verify(trackService, times(1)).deleteTrackById(track.getId());
 
     }
 
@@ -123,6 +131,7 @@ public class TrackControllerTest {
                 .contentType(MediaType.APPLICATION_JSON).content(asJsonString(track)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print());
+        verify(trackService, times(1)).getTrackById(track.getId());
 
     }
 
@@ -134,6 +143,17 @@ public class TrackControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print());
+        verify(trackService, times(1)).getAllTracks();
+    }
+    //This method is to check for negative cases where the given name fails to find the track
+    @Test
+    public void givenTrackNameShouldThrowException() throws Exception {
+        when(trackService.getAllTracks());
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/track")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isInternalServerError())
+                .andDo(MockMvcResultHandlers.print());
+        verify(trackService, times(1)).getAllTracks();
     }
 
     private static String asJsonString(final Object obj) {
