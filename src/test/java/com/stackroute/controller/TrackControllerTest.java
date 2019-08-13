@@ -43,6 +43,9 @@ public class TrackControllerTest {
 
     private List<Track> list = null;
 
+    /* @Before annotation is used on a method
+       code to run before each test case. i.e it runs before each test execution.
+            */
     @Before
     public void setUp() {
 
@@ -57,12 +60,18 @@ public class TrackControllerTest {
         list.add(track);
     }
 
+    /*  @After annotation is used on a method to run after each test case.
+           These methods will run even if any exceptions are thrown in the test case or in the case
+           of assertion failures.
+           In the tear down method ,object is initialized with null so that obj is destroyed
+           */
     @After
     public void tearDown() {
-        list = null;
-        track = null;
+        this.list = null;
+        this.track = null;
     }
 
+    //This test case for check whether the given track details is being saved
     @Test
     public void givenTrackShouldsaveTheTrack() throws Exception {
         when(trackService.saveTrack(any())).thenReturn(track);
@@ -74,7 +83,7 @@ public class TrackControllerTest {
 
     }
 
-
+    //This test case for checking whether a given track id already exists and return TrackAlreadyExistsException
     @Test
     public void givenExistsTrackAgainShouldReturnTrackAlreadyExistsException() throws Exception {
         when(trackService.saveTrack(any())).thenThrow(TrackAlreadyExistsException.class);
@@ -84,8 +93,9 @@ public class TrackControllerTest {
                 .andDo(MockMvcResultHandlers.print());
     }
 
+    //This method to return all the tracks that matches with a certain name
     @Test
-    public void givenTrackShouldREturnAllTracks() throws Exception {
+    public void givenTrackShouldReturnAllTracks() throws Exception {
         when(trackService.getAllTracks()).thenReturn(list);
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/track")
                 .contentType(MediaType.APPLICATION_JSON).content(asJsonString(track)))
@@ -94,6 +104,7 @@ public class TrackControllerTest {
 
     }
 
+    //This method to check whether to delete a track by a given track id
     @Test
     public void givenIdShouldReturnDeleteTrack() throws Exception {
         when(trackService.getAllTracks()).thenReturn(list);
@@ -104,6 +115,7 @@ public class TrackControllerTest {
 
     }
 
+    //This method to return a track details matching to the given track id
     @Test
     public void givenIdShouldReturnTheParticularTrack() throws Exception {
         when(trackService.getTrackById(track.getId())).thenReturn(track);
@@ -113,9 +125,10 @@ public class TrackControllerTest {
                 .andDo(MockMvcResultHandlers.print());
 
     }
+
+    //This method to find the tracks that matches to a certain track name
     @Test
-    public void givenNameShouldReturnListOfTracks() throws Exception
-    {
+    public void givenNameShouldReturnListOfTracks() throws Exception {
         when(trackService.getTrackByName(track.getName())).thenReturn(list);
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/track/track-name")
                 .contentType(MediaType.APPLICATION_JSON))

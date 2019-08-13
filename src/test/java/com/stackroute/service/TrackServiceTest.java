@@ -31,7 +31,11 @@ public class TrackServiceTest {
     @InjectMocks
     private TrackServiceImpl trackServiceImpl;
     private List<Track> list = null;
+    //private Object Track;
 
+    /* @Before annotation is used on a method
+   code to run before each test case. i.e it runs before each test execution.
+        */
     @Before
     public void setUp() {
         //Initialising the mock object
@@ -46,6 +50,11 @@ public class TrackServiceTest {
 
     }
 
+    /*  @After annotation is used on a method to run after each test case.
+           These methods will run even if any exceptions are thrown in the test case or in the case
+           of assertion failures.
+           In the tear down method ,object is initialized with null so that obj is destroyed
+           */
     @After
     public void tearDown() {
         this.trackServiceImpl = null;
@@ -53,6 +62,7 @@ public class TrackServiceTest {
         this.list = null;
     }
 
+    //This test case for check whether the given track details is being saved
     @Test
     public void givenTrackDetailsShouldSaveTracks() throws TrackAlreadyExistsException {
 
@@ -65,6 +75,7 @@ public class TrackServiceTest {
 
     }
 
+    //This test case for checking whether a given track id already exists and return TrackAlreadyExistsException
     @Test(expected = TrackAlreadyExistsException.class)
     public void givenTrackDetailsShouldReturnTrackAlreadyExistsException() throws TrackAlreadyExistsException {
         when(trackRepository.save(track)).thenReturn(null);
@@ -75,6 +86,13 @@ public class TrackServiceTest {
 
     }
 
+    //This method to check whether the given track name exists or not
+    @Test(expected = TrackNotFoundException.class)
+    public void givenTrackNameShouldReturnTrackNotFoundException() throws TrackNotFoundException {
+        trackServiceImpl.getTrackByName("track");
+    }
+
+    //This method to return all the tracks that matches with a certain name
     @Test
     public void givenInputShouldReturnAllTrackDetails() {
 
@@ -86,6 +104,7 @@ public class TrackServiceTest {
         verify(trackRepository, times(1)).findAll();
     }
 
+    //This method to return a track details matching to the given track id
     @Test
     public void givenTrackIdShouldReturnTrackDetails() throws TrackNotFoundException {
         trackRepository.save(track);
@@ -95,7 +114,13 @@ public class TrackServiceTest {
         Assert.assertEquals(track, getTrack.get());
         verify(trackRepository, times(1)).findById(1);
     }
-        @Test
+
+    @Test(expected = TrackNotFoundException.class)
+    public void givenNotExistingTrackIdShouldReturnTrackNotFoundException() throws TrackNotFoundException {
+        trackServiceImpl.getTrackById(1);
+    }
+
+    @Test
     public void givenTrackNameShouldReturnTrackDetails() throws TrackNotFoundException {
         trackRepository.save(track);
         when(trackRepository.getTrackByName("track name")).thenReturn((List<Track>) track);
@@ -107,9 +132,25 @@ public class TrackServiceTest {
 
     @Test
     public void givenTrackDetailsShouldUpdateThePreviousDetails() {
-    trackRepository.save(track);
-     when(trackRepository.findById(track.getId())).thenReturn(Optional.ofNullable(track));
+        trackRepository.save(track);
+        when(trackRepository.findById(track.getId())).thenReturn(Optional.of(track));
+        track.setComment("comment2");
+        Track updatedTrack = new Track(10, "track name2", "comment2");
+        Assert.assertEquals(updatedTrack, track);
+        verify(trackRepository, times(0)).findById(track.getId());
 
     }
+
+    //This method to check whether to delete a track by a given track id
+    @Test
+    public void givenTrackIdShouldReturnTheDeletedTrack() throws TrackNotFoundException {
+        trackRepository.save(track);
+        when(trackRepository.existsById(track.getId())).thenReturn(true);
+        when(trackRepository.findById(track.getId())).thenReturn(Optional.of(track));
+        trackServiceImpl.deleteTrackById(track.getId());
+        Assert.assertEquals(track, trackServiceImpl.getTrackById(track.getId()));
+        verify(trackRepository, times(1)).deleteById(track.getId());
+    }
+
 
 }

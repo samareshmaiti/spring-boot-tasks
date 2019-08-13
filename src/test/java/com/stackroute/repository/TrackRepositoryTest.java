@@ -19,9 +19,12 @@ import java.util.List;
 public class TrackRepositoryTest {
 
     @Autowired
-   private  TrackRepository trackRepository;
+    private TrackRepository trackRepository;
     private Track track;
 
+    /* @Before annotation is used on a method
+       code to run before each test case. i.e it runs before each test execution.
+            */
     @Before
     public void setUp() {
         track = new Track();
@@ -31,14 +34,19 @@ public class TrackRepositoryTest {
 
     }
 
+    /*  @After annotation is used on a method to run after each test case.
+        These methods will run even if any exceptions are thrown in the test case or in the case
+        of assertion failures.
+        In the tear down method ,object is initialized with null so that obj is destroyed
+        */
     @After
     public void tearDown() {
 
         trackRepository.deleteAll();
-        track=null;
+        track = null;
     }
 
-
+    //This test case for check whether the given track details is being saved
     @Test
     public void givenTrackShouldReturnSavedTrack() {
         trackRepository.save(track);
@@ -47,6 +55,7 @@ public class TrackRepositoryTest {
 
     }
 
+    //This test case for checking whether a given track id already exists and return TrackAlreadyExistsException
     @Test
     public void givenTrackShouldNotReturnSavedTrack() {
         Track testUser = new Track(10, "track name", "comment1");
@@ -55,6 +64,7 @@ public class TrackRepositoryTest {
         Assert.assertNotSame(testUser, track);
     }
 
+    //This method to return all the tracks that matches with a certain name
     @Test
     public void givenInputShouldReturnAllTracks() {
         Track u = new Track(10, "track name1", "comment2");
@@ -67,38 +77,39 @@ public class TrackRepositoryTest {
     }
 
 
-
     @Test
     public void givenTrackNameShouldReturnProperId() {
         trackRepository.save(track);
         Track trackDetails = trackRepository.findById(track.getId()).get();
         Assert.assertEquals(99, trackDetails.getId());
     }
+
     @Test
     public void givenTrackNameShouldNotReturnCorrectId() {
         trackRepository.save(track);
         Track trackDetails = trackRepository.findById(track.getId()).get();
         Assert.assertNotEquals(3, trackDetails.getId());
     }
+
+    //This method to check whether to delete a track by a given track id
     @Test
-    public void givenTrackIdShouldReturnDeletedTrack()
-    {
+    public void givenTrackIdShouldReturnDeletedTrack() {
         trackRepository.save(track);
         trackRepository.deleteById(track.getId());
-        Assert.assertEquals(10,track.getId());
+        Assert.assertEquals(10, track.getId());
 
     }
+
     @Test
-    public void givenTrackDetailsShouldUpdatePreviousTrackDetails()
-    {
+    public void givenTrackDetailsShouldUpdatePreviousTrackDetails() {
         trackRepository.save(track);
         trackRepository.deleteById(track.getId());
         track.setId(10);
         track.setName("maiti");
         track.setComment("comment");
         trackRepository.save(track);
-        Track updatedTrack=trackRepository.findById(track.getId()).get();
-        Assert.assertEquals(track,updatedTrack);
+        Track updatedTrack = trackRepository.findById(track.getId()).get();
+        Assert.assertEquals(track, updatedTrack);
     }
 
 
